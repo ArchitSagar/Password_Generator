@@ -6,6 +6,8 @@ function App() {
   const [numAllowed, setnumAllowed] = useState(false)
   const [charAllowed, setcharAllowed] = useState(false)
   const [pass,setPass] = useState("")
+  const initialText = 'Copy';
+  const [buttonText, setButtonText] = useState(initialText);
   const passRef = useRef(null)
 
   const passGenerator = useCallback(()=> {
@@ -23,12 +25,16 @@ function App() {
 
   const copyPassToClipborad = useCallback(()=>{
     passRef.current?.select();
+    setButtonText('copied');
+    setTimeout(() => {
+      setButtonText(initialText)
+    },1000);
     window.navigator.clipboard.writeText(pass)
-  },[pass])
+  },[pass,buttonText])
 
   useEffect(()=>{
     passGenerator()
-  },[length,numAllowed,charAllowed,passGenerator])
+  },[length,numAllowed,charAllowed,passGenerator,])
 
   return (
     <div className='flex flex-col h-screen w-screen bg-gradient-to-r from-[#0f0c29] via-[#302b63] to-[#24243e] '>
@@ -43,7 +49,7 @@ function App() {
             readOnly 
             ref={passRef}
           />
-          <button onClick={copyPassToClipborad} className=' bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 text-white px-3 py-0.5 shrink-0'>copy</button>
+          <button onClick={copyPassToClipborad} className=' bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 text-white px-3 py-0.5 shrink-0'>{buttonText}</button>
         </div>
         <div className='flex flex-col sm:flex-row  text-m  gap-x-2 pb-2'>
           <div className='flex items-center gap-x-1'>
